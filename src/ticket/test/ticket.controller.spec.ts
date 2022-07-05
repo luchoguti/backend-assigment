@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TicketController } from './ticket.controller';
 import { TicketService } from './ticket.service';
 
-describe('TicketController', () => {
+describe('Validate Compile Controller TicketController', () => {
   let controller: TicketController;
 
   beforeEach(async () => {
