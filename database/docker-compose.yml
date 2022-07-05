@@ -13,5 +13,9 @@ services:
       ports:
         - "3310:3306"
       expose:
-        - '3306'
+        - '3310'
+      volumes:
+        - db_data:/var/lib/mysql
       restart: always
+volumes:
+  db_data:
