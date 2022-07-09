@@ -24,15 +24,14 @@ export class TicketEntity {
         default:"low"
     })
     priority: ticketPriorityType;
-    @Column()
     @Column({
         type:"enum",
         enum:["result","assign","to do","by assign"],
         default:"by assign"
     })
-    state: ticketStateType
+    state: ticketStateType;
     @CreateDateColumn()
     created_at:Date;
-    @UpdateDateColumn ()
+    @UpdateDateColumn()
     update_at:Date;
 }

@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TicketController } from './ticket/ticket.controller';
 import { TicketModule } from './ticket/ticket.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {TicketEntity} from "./ticket/entities/ticket.entity";
+import { AgentModule } from './agent/agent.module';
 
 @Module({
   imports: [
@@ -16,11 +15,12 @@ import {TicketEntity} from "./ticket/entities/ticket.entity";
         username: 'user_docred',
         password: 'practicalDocred22#',
         database: 'practicadocred',
-        entities: [TicketEntity],
+        entities: [__dirname + '/**/*.entity.{ts,js}'],
         synchronize: true,
       }),
+      AgentModule,
   ],
-  controllers: [AppController, TicketController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

@@ -1,18 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TicketService } from './ticket.service';
+import { TicketService } from '../ticket.service';
+import {getRepositoryToken} from "@nestjs/typeorm";
+import {TicketEntity} from "../entities/ticket.entity";
+import {TicketModule} from "../ticket.module";
 
 describe('TicketService', () => {
-  let service: TicketService;
-
+  let ticketService: TicketService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TicketService],
-    }).compile();
+      imports: [TicketModule],
+    })
+        .overrideProvider(getRepositoryToken(TicketEntity))
+        .useValue(jest.fn())
+        .compile();
 
-    service = module.get<TicketService>(TicketService);
+    ticketService = await module.get<TicketService>(TicketService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(ticketService).toBeDefined();
   });
+
 });
