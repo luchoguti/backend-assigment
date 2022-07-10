@@ -14,7 +14,11 @@ export class AgentService {
   ) {
   }
   async create(createAgentDto: CreateAgentDto):Promise<AgentInterface> {
-    return await this.agentRepository.save(createAgentDto);
+    let create_agent = await this.agentRepository.save(createAgentDto);
+    if(create_agent.id_agent === undefined){
+      throw new HttpException('It Agent can not created!', HttpStatus.FORBIDDEN);
+    }
+    return create_agent;
   }
 
   async findAll():Promise<AgentInterface[]> {
@@ -22,9 +26,14 @@ export class AgentService {
   }
 
   async findOne(id: number):Promise<AgentInterface> {
-    return await this.agentRepository.findOneBy({
+    let agent = await this.agentRepository.findOneBy({
       id_agent:id
     });
+    if(!agent){
+      return {id_agent: 0, names: "", state: false}
+    }else{
+      return agent;
+    }
   }
 
   async update(id: number, updateAgentDto: UpdateAgentDto):Promise<AgentInterface> {

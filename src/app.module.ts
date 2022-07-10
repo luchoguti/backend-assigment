@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TicketModule } from './ticket/ticket.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import { AgentModule } from './agent/agent.module';
+import { TicketResolveModule } from './ticket_resolve/ticket_resolve.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { AgentModule } from './agent/agent.module';
         synchronize: true,
       }),
       AgentModule,
+      TicketResolveModule,
+      ScheduleModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],
