@@ -3,12 +3,13 @@ import { TicketService } from './ticket.service';
 import { TicketController } from './ticket.controller';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {TicketEntity} from "./entities/ticket.entity";
-import {AgentService} from "../agent/agent.service";
 import {AgentEntity} from "../agent/entities/agent.entity";
+import {AgentModule} from "../agent/agent.module";
 
 @Module({
-  imports:[TypeOrmModule.forFeature([TicketEntity,AgentEntity])],
+  imports:[TypeOrmModule.forFeature([TicketEntity,AgentEntity]),AgentModule],
   controllers: [TicketController],
-  providers: [TicketService,AgentService]
+  providers: [TicketService],
+  exports: [TicketService]
 })
 export class TicketModule {}

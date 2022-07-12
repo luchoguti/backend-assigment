@@ -16,7 +16,7 @@ export class AgentService {
   async create(createAgentDto: CreateAgentDto):Promise<AgentInterface> {
     let create_agent = await this.agentRepository.save(createAgentDto);
     if(create_agent.id_agent === undefined){
-      throw new HttpException('It Agent can not created!', HttpStatus.FORBIDDEN);
+      throw new HttpException('It Agent can not created!', HttpStatus.CONFLICT);
     }
     return create_agent;
   }
@@ -41,7 +41,7 @@ export class AgentService {
       id_agent: id
     });
     if (!agent){
-      throw new HttpException('This agent does not exist', HttpStatus.NOT_FOUND);
+      throw new HttpException('This agent does not exist', HttpStatus.CONFLICT);
     }
     let update_agent = Object.assign(agent,updateAgentDto);
     await this.agentRepository.update(id,updateAgentDto);
@@ -54,7 +54,7 @@ export class AgentService {
     });
     const agent_delete = await this.agentRepository.delete(id);
     if (agent_delete.affected == 0){
-      throw new HttpException('This agent does not exist.', HttpStatus.NOT_FOUND);
+      throw new HttpException('This agent does not exist.', HttpStatus.CONFLICT);
     }
     return agent;
   }

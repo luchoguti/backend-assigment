@@ -11,10 +11,10 @@ import {AgentService} from "../agent/agent.service";
 export class TicketService {
     constructor(
         @InjectRepository(TicketEntity)
-        private readonly ticketRepository: Repository<TicketInterface>
+        private readonly ticketRepository: Repository<TicketInterface>,
+        private readonly agentService: AgentService
     ) {
     }
-    private readonly agentService: AgentService;
 
     private implementTicketInterface: TicketInterface = {
         created_at: undefined,
@@ -30,7 +30,7 @@ export class TicketService {
     async create(createTicketDto: CreateTicketDto): Promise<TicketInterface> {
         let new_ticket = await this.ticketRepository.save(createTicketDto);
         if (new_ticket.id_ticket === undefined) {
-            throw new HttpException('It ticket can not created!', HttpStatus.FORBIDDEN);
+            throw new HttpException('It ticket can not created!', HttpStatus.CONFLICT);
         }
         return new_ticket;
     }
@@ -56,14 +56,14 @@ export class TicketService {
             id_ticket: id
         });
         if (!ticket) {
-            throw new HttpException('This ticket does not exist', HttpStatus.NOT_FOUND);
+            throw new HttpException('This ticket does not exist', HttpStatus.CONFLICT);
         }
         let update_ticket = Object.assign(ticket, updateTicketDto);
         let update_execute = await this.ticketRepository.update(id, update_ticket);
         if (update_execute.affected > 0) {
             return update_ticket;
         } else {
-            throw new HttpException('This ticket resolve was not execute.', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException('This ticket was not update!', HttpStatus.CONFLICT);
         }
     }
 
@@ -73,7 +73,7 @@ export class TicketService {
         });
         const ticket_delete = await this.ticketRepository.delete(id);
         if (ticket_delete.affected === 0) {
-            throw new HttpException('This ticket does not exist.', HttpStatus.NOT_FOUND);
+            throw new HttpException('This ticket does not exist.', HttpStatus.CONFLICT);
         }
         return ticket;
     }
@@ -88,12 +88,22 @@ export class TicketService {
             return this.implementTicketInterface;
         }
     }
-    async assignTicket(createTicketDto: CreateTicketDto){
+
+    async assignAgentTicket(updateTicketDto: UpdateTicketDto) {
         let agent_free = await this.agentService.searchAgentFree();
-        if(Object.values(agent_free).length > 0){
-            createTicketDto['id_agent'] = agent_free['id_agent'];
-            createTicketDto['state'] = 'assign';
-            await this.agentService.update(agent_free['id_agent'],{state:false});
+        if (Object.values(agent_free).length > 0 && updateTicketDto.id_agent === undefined) {
+            updateTicketDto['id_agent'] = agent_free['id_agent'];
+            updateTicketDto['state'] = 'assign';
+            await this.agentService.update(agent_free['id_agent'], {state: false});
+        }else if(updateTicketDto.id_agent !== undefined){
+            let agent_validate = await this.agentService.findOne(updateTicketDto.id_agent);
+            if(agent_validate.state){
+                updateTicketDto['state'] = 'assign';
+                await this.agentService.update(updateTicketDto.id_agent, {state: false});
+            }else{
+                throw new HttpException('Agent is in state busy', HttpStatus.CONFLICT);
+            }
         }
+        return updateTicketDto;
     }
 }
