@@ -57,9 +57,9 @@ Open a browser preference us to url http://localhost:3070/ examples:
 <label>One</label>
 <img src="https://drive.google.com/uc?export=view&id=1nOdUKpeHWHTBU4fvSFNFAROB6hWmsWkr" alt="Documentation one" />
 <label>Two</label>
-<img src="https://drive.google.com/uc?export=view&id=1rGB3_rSw1sQ9n0DuFQKEDtjzmlqMda4s" alt="Documentation one" />
+<img src="https://drive.google.com/uc?export=view&id=1rGB3_rSw1sQ9n0DuFQKEDtjzmlqMda4s" alt="Documentation two" />
 <label>Three</label>
-<img src="https://drive.google.com/uc?export=view&id=1H-nUXzAgJ0PFU4_HJHSQfsZlkcQafSZf" alt="Documentation one" />
+<img src="https://drive.google.com/uc?export=view&id=1H-nUXzAgJ0PFU4_HJHSQfsZlkcQafSZf" alt="Documentation three" />
 <p align="center">
 
 
